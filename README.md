@@ -42,10 +42,14 @@ Examples
 *Note* all examples must be run when the server is offline. Also, make backup! This is very much alpha software still and it *probably* will fail and break stuff for you!
 
 Example of how to give set the number of thruster blocks a user has.
+    
     mathias@ygdrasil:~/games/star-made/StarMade/server-database$ ~/development/axe/axe --set-block 8 ENTITY_PLAYERSTATE_User-1.ent
+    
 
 Example of making every player on the server loose a tiny fraction of money due to inflation
+    
     mathias@ygdrasil:~/games/star-made/StarMade/server-database$ ~/development/axe/axe --mult-credits 0.99 *STATE_User-1.ent
+    
 
 Example of restocking shops, so that they will smoothly get SOME more power blocks but will become saturated at 1000 blocks. 
     mathias@ygdrasil:~/games/star-made/StarMade/server-database$ ~/development/axe/axe --mult-blocks 2 0.5 --add-blocks 2 500 *SHOP*.ent
