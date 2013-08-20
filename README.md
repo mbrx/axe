@@ -52,7 +52,9 @@ Example of making every player on the server loose a tiny fraction of money due 
     
 
 Example of restocking shops, so that they will smoothly get SOME more power blocks but will become saturated at 1000 blocks. 
+    
     mathias@ygdrasil:~/games/star-made/StarMade/server-database$ ~/development/axe/axe --mult-blocks 2 0.5 --add-blocks 2 500 *SHOP*.ent
+    
 For the math: assume that the shop has X items of the given kind, then we will keep 0.5X + 500. If the shop has more than 1000 items then we will have a net loss of items, if it has less than 1000 items we will get new items.
 If you want to make a smoothing forumla that is slower you can do: --mult-blocks <id> <speed> --add-blocks <id> <magic> where _speed_ is a value from 0.0 to 1.0, and where _magic_ is the limit you want the items to saturate at multiplied by 1-speed. 
 
