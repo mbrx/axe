@@ -19,4 +19,4 @@ TODO
 Planned future features include adding new inventory items to players (if there are free slots in the inventory). 
 
 
-/ Mathias Broxvall
+/ Mathias Broxvall (Hari_Seldon @mpnetwork, @brierie)
