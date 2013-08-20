@@ -54,6 +54,7 @@ int quiet=0;
 void printUsage(char *programName) {
   printf("Usage: %s (command | option | filename)*\n"
 	 "where valid commands are\n"
+	 "       --print-all\n"
 	 "       --print-credits\n"
 	 "       --set-credits <integer>\n"
 	 "       --add-credits <integer>\n"
