@@ -18,6 +18,7 @@ Future other tools can provide operations more suited for end-users.
 
 TODO
 ----
+ - [x] Make a TODO list
  - [ ] Get more TODO inputs from the users.
  - [ ] Print out sector/spawn information from players.
  - [ ] Allow the set/add/mult operations to work on every stack of an item of the same id. Currently only the first stack is affected.
