@@ -18,10 +18,10 @@ Future other tools can provide operations more suited for end-users.
 
 TODO
 ----
- * [ ] Get more TODO inputs from the users.
- * [ ] Print out sector/spawn information from players.
- * [ ] Allow the set/add/mult operations to work on every stack of an item of the same id. Currently only the first stack is affected.
- * [ ] Tidy up datastructure after removing entires. Stacks of size zero is currently left, and removed when the user logs in. 
+ - [ ] Get more TODO inputs from the users.
+ - [ ] Print out sector/spawn information from players.
+ - [ ] Allow the set/add/mult operations to work on every stack of an item of the same id. Currently only the first stack is affected.
+ - [ ] Tidy up datastructure after removing entires. Stacks of size zero is currently left, and removed when the user logs in. 
 
 
 Commandline options
