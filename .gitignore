@@ -15,3 +15,9 @@
 *.exe
 *.out
 *.app
+
+# Emacs files
+*~
+
+# Starmade ent files (for debugging)
+*.ent

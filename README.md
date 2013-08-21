@@ -1,11 +1,13 @@
-axe
-===
+axe v0.1
+========
 
 A tool for hacking the ENT files on StarMade servers. Currently the tool supports the following 
 
    * Printing out the almost complete structure of any ent file
    * Modifying (print, set, add, multiply) the credits of playerstate type ents. 
-   * Modifying (print, set, add, multiply) _currently already existing_ inventory blocks of playerstate and shops type ents. 
+   * Modifying (print, set, add, multiply) inventory blocks of playerstate and shops type ents. 
+
+StarMade version: 0.09387
 
 Audience
 --------
@@ -16,7 +18,10 @@ Future other tools can provide operations more suited for end-users.
 
 TODO
 ----
-Planned future features include adding new inventory items to players (if there are free slots in the inventory). 
+ * [ ] Get more TODO inputs from the users.
+ * [ ] Print out sector/spawn information from players.
+ * [ ] Allow the set/add/mult operations to work on every stack of an item of the same id. Currently only the first stack is affected.
+ * [ ] Tidy up datastructure after removing entires. Stacks of size zero is currently left, and removed when the user logs in. 
 
 
 Commandline options
