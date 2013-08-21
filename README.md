@@ -24,24 +24,24 @@ Commandline options
 
 These are the valid commandline operations and options. Everything that is not an operation/option is considered to be an ent file and will be processed. 
 
- * --print-all
- * --print-credits
- * --set-credits <integer>
- * --add-credits <integer>
- * --mult-credits <float>
- * --print-block <id>
- * --set-block <id> <integer>
- * --add-block <id> <integer>
- * --mult-block <id> <float>
- * --simulate,
- * --quiet,
+ * `--print-all` Print data-tree for ENT file. Will abort if unhandled datatypes exists in files.
+ * `--print-credits` Print credits for playerstate type ENT files
+ * `--set-credits <integer>` Sets the credits of playerstate type ENT files
+ * `--add-credits <integer>` Adds a given amount of credits (can be negative) to playerstate type ENT files
+ * `--mult-credits <float>` Multiplies credits by a constant
+ * `--print-block <id>` Prints number of blocks matching the ID that is found in the playerstate OR shop type ENT files
+ * `--set-block <id> <integer>` Sets the number of blocks of given ID that is found in the playerstate OR shop type ENT files
+ * `--add-block <id> <integer>` Adds the number of blocks of given ID (can be negative)
+ * `--mult-block <id> <float>` Multiplies the number of blocks of given ID in the playerstate OR shop type ENT files
+ * `--simulate` Prevents any changes from beeing written to disk
+ * `--quiet` Suppresses any informational printouts to simplify script processing
 
 Examples
 --------
 
 *Note* all examples must be run when the server is offline. Also, make backup! This is very much alpha software still and it *probably* will fail and break stuff for you!
 
-Example of how to give set the number of thruster blocks a user has.
+Example of how to give/set the number of thruster blocks a user has.
     
     mathias@ygdrasil:~/games/star-made/StarMade/server-database$ ~/development/axe/axe --set-block 8 ENTITY_PLAYERSTATE_User-1.ent
     
@@ -56,7 +56,7 @@ Example of restocking shops, so that they will smoothly get SOME more power bloc
     mathias@ygdrasil:~/games/star-made/StarMade/server-database$ ~/development/axe/axe --mult-blocks 2 0.5 --add-blocks 2 500 *SHOP*.ent
     
 For the math: assume that the shop has X items of the given kind, then we will keep 0.5X + 500. If the shop has more than 1000 items then we will have a net loss of items, if it has less than 1000 items we will get new items.
-If you want to make a smoothing forumla that is slower you can do: --mult-blocks <id> <speed> --add-blocks <id> <magic> where _speed_ is a value from 0.0 to 1.0, and where _magic_ is the limit you want the items to saturate at multiplied by 1-speed. 
+If you want to make a smoothing forumla that is slower you can do: `--mult-blocks <id> <speed> --add-blocks <id> <magic>` where _speed_ is a value from 0.0 to 1.0, and where _magic_ is the limit you want the items to saturate at multiplied by 1-speed. 
 
 Example of how to print all information contained in an ent file. Note that bytearray objects are skipped (I can later add options for exporting them if requested). Any raw serialized java objects will abort the program. 
 

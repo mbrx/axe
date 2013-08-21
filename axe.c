@@ -54,19 +54,19 @@ int quiet=0;
 void printUsage(char *programName) {
   printf("Usage: %s (command | option | filename)*\n"
 	 "where valid commands are\n"
-	 "       --print-all\n"
-	 "       --print-credits\n"
-	 "       --set-credits <integer>\n"
-	 "       --add-credits <integer>\n"
-	 "       --mult-credits <float>\n"
-	 "       --print-block <id>\n"
-	 "       --set-block <id> <integer>\n"
-	 "       --add-block <id> <integer>\n"
-	 "       --mult-block <id> <float>\n"
+	 "       --print-all                    Print data-tree for ENT file. Will abort if unhandled datatypes exists in files.\n"
+	 "       --print-credits                Print credits for playerstate type ENT files\n"
+	 "       --set-credits <integer>        Sets the credits of playerstate type ENT files\n"
+	 "       --add-credits <integer>        Adds a given amount of credits (can be negative) to playerstate type ENT files\n"
+	 "       --mult-credits <float>         Multiplies credits by a constant\n"
+	 "       --print-block <id>             Prints number of blocks matching the ID that is found in the playerstate OR shop type ENT files\n"
+	 "       --set-block <id> <integer>     Sets the number of blocks of given ID that is found in the playerstate OR shop type ENT files\n"
+	 "       --add-block <id> <integer>     Adds the number of blocks of given ID (can be negative).\n"
+	 "       --mult-block <id> <float>      Multiplies the number of blocks of given ID in the playerstate OR shop type ENT files\n"
 	 "\n",
 	 "valid options are"
-	 "       --simulate\n",
-	 "       --quiet\n",
+	 "       --simulate                     Prevents any changes from beeing written to disk\n",
+	 "       --quiet                        Suppresses any informational printouts to simplify script processing\n",
     programName);
   exit(0);
 }
