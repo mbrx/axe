@@ -30,6 +30,7 @@
 
 void printAllCredits() {
   for(int i=0;i<nEntFiles;i++) {
+    printf("%s : ",entFileNames[i]);
     if(!quiet) printf("Printing credits for %s\n",entFileNames[i]);
     int credits = readCredits(i);
     printf("%d\n",credits);
