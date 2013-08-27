@@ -37,6 +37,24 @@ void printAllCredits() {
   }
 }
 
+void printAllInventory() {
+  for(int i=0;i<nEntFiles;i++) {
+    printf("%s\n",entFileNames[i]);
+    if(!quiet) printf("<blockId> <amount>\n");
+    printInventory(i);
+  }
+}
+
+void printAllSector() {
+  int xyz[3];
+  for(int i=0;i<nEntFiles;i++) {
+    printf("%s : ",entFileNames[i]);
+    if(getSector(i,xyz) == 0) printf("fail\n");
+    else printf("%d %d %d\n",xyz[0],xyz[1],xyz[2]);
+  }
+}
+
+
 void setAllCredits(int credits) {
   for(int i=0;i<nEntFiles;i++) {
     if(!quiet) printf("Setting %d credits to %s\n",credits,entFileNames[i]);
@@ -61,37 +79,61 @@ void multAllCredits(float factor) {
 void printAllBlock(int block) {
   for(int i=0;i<nEntFiles;i++) {
     printf("%s : ",entFileNames[i]);
-    int index=findBlockIndex(i,block);
-    printf("%d\n",getValueAsInt(i,index));    
+    int prevIndex=-1;
+    for(int total=0;;) {
+      int index=findBlockIndex(i,block, prevIndex);
+
+      if(index == -1) { 
+	printf("%d\n",total); 
+	return; 
+      }
+      prevIndex=index;
+      total += getValueAsInt(i,index);
+    }
   }
 }
 void setBlockAmount(int entId, int block, int amount) {
   if(amount == 0) {
     printf("Sorry, we cannot delete items yet - for now it will just have to be a zero entry item\n");
   }
-  int index=findBlockIndex(entId,block);
+  int index=findBlockIndex(entId,block,-1);
   //if(index == -1) createNewBlock
 }
 int getBlockAmount(int entId, int block) {
-  int index=findBlockIndex(entId,block);
-  return getValueAsInt(entId,index);
+  int total=0;
+  int prev=-1;
+  for(;;) {
+    int index=findBlockIndex(entId,block,prev);
+    if(index == -1) return total;
+    total += getValueAsInt(entId,index);
+  }
+  return 0;
 }
 void setAllBlock(int block, int amount) {
   printf("SetAllBlock %d %d\n",block,amount);
   for(int i=0;i<nEntFiles;i++) {
     printf("Setting block %d in %s\n",block,entFileNames[i]);
-    int index=findBlockIndex(i,block);
-    if(index != -1) setValueAsInt(i,index,max(0,amount));
+    int first=findBlockIndex(i,block,-1);
+    if(first != -1) {
+      setValueAsInt(i,first,max(0,amount));
+      while(1) {
+	int next=findBlockIndex(i,block,first);
+	if(next == -1) break;
+	setValueAsInt(i,first,0);
+	first=next;
+      }
+    }
     else {
       if(!quiet) printf("Block %d not previously existing in %s\n",block,entFileNames[i]);
       createNewBlockEntry(i, block, max(0,amount));
     }
   }
 }
+/* TODO - make this function also safe for multiple instances of a block */
 void addAllBlock(int block, int amount) {
   printf("AddAllBlock %d %d\n",block,amount);
   for(int i=0;i<nEntFiles;i++) {
-    int index=findBlockIndex(i,block);
+    int index=findBlockIndex(i,block,-1);
     if(index != -1) setValueAsInt(i,index,max(0,getValueAsInt(i,index)+amount));
     else {
       if(!quiet) printf("Block %d not previously existing in %s\n",block,entFileNames[i]);
@@ -99,11 +141,12 @@ void addAllBlock(int block, int amount) {
     }
   }
 }
+/* TODO - make this function also safe for multiple instances of a block */
 void multAllBlock(int block, float factor) { 
   printf("MultAllBlock %d %f\n",block,factor); 
   for(int i=0;i<nEntFiles;i++) {
     printf("Multiplying block %d in %s\n",block,entFileNames[i]);
-    int index=findBlockIndex(i,block);
+    int index=findBlockIndex(i,block,-1);
     if(index != -1) setValueAsInt(i,index,max(0,getValueAsInt(i,index)*factor));
     else {
       //if(!quiet) printf("Block %d not previously existing in %s\n",block,entFileNames[i]);

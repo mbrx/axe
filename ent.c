@@ -199,7 +199,7 @@ void printEntry(int ordinal, char *label, uint8_t **data) {
   }
 }
 
-int findBlockIndex(int entId, int blockId) {
+int findBlockIndex(int entId, int blockId,int previous) {
   uint8_t typesBuffer[100000];
   int bufLen=readTag(entId,"types",typesBuffer,sizeof(typesBuffer));
   if(!bufLen) return -1;
@@ -212,7 +212,7 @@ int findBlockIndex(int entId, int blockId) {
   int numTypes = bufToUInt32(typesBuffer+1);
   int contentPos = 1+4;
   for(int i=0;i<numTypes && contentPos < bufLen;i++, contentPos+=2)
-    if(bufToInt16(typesBuffer+contentPos) == blockId) {
+    if(i>previous && bufToInt16(typesBuffer+contentPos) == blockId) {
       /*if(!quiet) 
 	printf("Block %d is at index %d\n",blockId,i);*/
       return i;
@@ -220,6 +220,43 @@ int findBlockIndex(int entId, int blockId) {
   return -1;
 }
 
+
+void printInventory(int entId) { 
+  uint8_t valuesBuffer[100000];
+  uint8_t typesBuffer[100000];
+  /* Reading in the data through readTag is safer since we can avoid getting stuck on serialized objects */
+  int valLen=readTag(entId,"values",valuesBuffer,sizeof(valuesBuffer));
+  int typeLen=readTag(entId,"types",typesBuffer,sizeof(typesBuffer));
+  if(valLen<1 || typeLen<1) {
+    printf("Error finding all tags needed to print inventory\n");
+  }
+  char label[256];
+
+//  hexDump(typesBuffer,typeLen);
+
+  int typesOrdinal = typesBuffer[0];
+  if(typesOrdinal != INT16) {
+    fprintf(stderr,"Error, something has changed in the fileformat. The Ents are fighting back. Better to flee like a coward than risk messing with it.\n");
+    exit(-1);
+  }
+  int numTypes = bufToUInt32(typesBuffer+1);
+  uint8_t *typesPnt=typesBuffer+5;
+  uint8_t *valuesPnt=valuesBuffer;
+
+  for(int i=0;i<numTypes;i++) {
+    int type = bufToInt16(typesPnt); 
+    typesPnt += 2;
+
+    uint8_t *pnt = valuesPnt;
+    int valueOrdinal=getOrdinal(&pnt);
+    getLabel(&pnt,label,sizeof(label));
+    if(valueOrdinal == INT32) {
+      int amount = bufToInt32(pnt);
+      printf("%d %d\n",type,amount);
+    }
+    skipStructEntry(&valuesPnt);
+  }
+}
 int getValueAsInt(int entId, int index) {
   uint8_t buffer[100000];
   uint8_t *pnt=buffer;
@@ -415,9 +452,20 @@ int createNewBlockEntry(int entId,int blockId,int amount) {
     printf("Error creating new block, there are no tag 'values' in file\n");
     exit(0);
   }
-  printf("len=%d, current position: %d\n",len,pnt-buf);
+  //printf("len=%d, current position: %d\n",len,pnt-buf);
   len+=insertStructEntry(&pnt,buf+sizeof(buf),len-(pnt-buf)+100,INT32,"null");
   len+=insertInt32(&pnt,buf+sizeof(buf),len-(pnt-buf)+100,amount);
   
   writeBufferToEnt(entId,buf,len);
+}
+
+int getSector(int entId, int *xyz) {
+  uint8_t buffer[1024];
+  int len = readTag(entId, "sector", buffer, sizeof(buffer));
+  if(len < 4*3) return 0;
+  uint8_t *pnt = buffer;
+  xyz[0] = bufToInt32(pnt);
+  xyz[1] = bufToInt32(pnt+4);
+  xyz[2] = bufToInt32(pnt+8);
+  return 1;
 }

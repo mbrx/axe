@@ -51,6 +51,8 @@ void printUsage(char *programName) {
 	 "       --set-block <id> <integer>     Sets the number of blocks of given ID that is found in the playerstate OR shop type ENT files\n"
 	 "       --add-block <id> <integer>     Adds the number of blocks of given ID (can be negative).\n"
 	 "       --mult-block <id> <float>      Multiplies the number of blocks of given ID in the playerstate OR shop type ENT files\n"
+	 "       --print-inventory              Prints each blockID and number that is found in the inventory on a new line.\n"
+	 "       --print-sector                 Prints <filename> : <x> <y> <z>  where xyz are the last known sector of the player.\n"
 	 "\n",
 	 "valid options are"
 	 "       --simulate                     Prevents any changes from beeing written to disk\n",
@@ -78,6 +80,8 @@ int main(int argc, char **args) {
       else if(strcmp(args[i],"--print-all") == 0) {if(stage) printAll();  }
       else if(strcmp(args[i],"--print-from") == 0) {if(stage) printFrom(args[i+1]); i++; }
       else if(strcmp(args[i],"--print-credits") == 0) {if(stage) printAllCredits();  }
+      else if(strcmp(args[i],"--print-inventory") == 0) {if(stage) printAllInventory();  }
+      else if(strcmp(args[i],"--print-sector") == 0) {if(stage) printAllSector(); }
       else if(strcmp(args[i],"--set-credits") == 0) {if(stage) setAllCredits(atoi(args[++i])); else i++; }
       else if(strcmp(args[i],"--add-credits") == 0) {if(stage) addAllCredits(atoi(args[++i])); else i++; }
       else if(strcmp(args[i],"--mult-credits") == 0) {if(stage) multAllCredits(atof(args[++i])); else i++; }
@@ -87,6 +91,7 @@ int main(int argc, char **args) {
       else if(strcmp(args[i],"--mult-block") == 0) {if(stage) multAllBlock(atoi(args[i+1]), atof(args[i+2])); i+=2; }
       else if(strcmp(args[i],"--max-slots") == 0) {maxSlots=atoi(args[i]); i++; }
       else if(strcmp(args[i],"--simulate") == 0) simulateOnly=1;
+
       else if(strcmp(args[i],"--quiet") == 0) quiet=1;
       else {
 	/* This is a file to process, add it to the ent list */
@@ -138,4 +143,33 @@ void int32ToBuf(int32_t val, uint8_t *buf) {
 void int16ToBuf(int16_t val, uint8_t *buf) {
   buf[0]=(val>>8) & 0xff;
   buf[1]=(val>>0) & 0xff;
+}
+
+void hexDump(void *data,int datalen) {
+  /* Print a hex-dump of the received data */
+  int i, row, nRows=datalen/16;
+  for(row=0;row<nRows||(row==nRows && datalen%16 != 0);row++) {
+    /* Print hex values */
+    for(i=0;i<16 && (row < nRows || i < (datalen%16));i++) {
+      printf("%02x",((unsigned char*)data)[i+row*16]);
+      if(i % 4 == 3) printf(" ");
+    }
+    /* Fill out remaining space */
+    for(;i<16;i++) {
+      printf("  ");
+      if(i % 4 == 3) printf(" ");
+    }
+    /* Print chars */
+    printf("    ");
+
+    for(i=0;i<16 && (row < nRows || i < (datalen%16));i++) {
+      unsigned char c = ((unsigned char*)data)[i+row*16];
+      if(isprint(c))
+	printf("%c",((unsigned char*)data)[i+row*16]);
+      else
+	printf("@");
+      if(i % 4 == 3) printf(" ");
+    }
+    printf("\n");
+  }
 }

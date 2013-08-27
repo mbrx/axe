@@ -21,8 +21,10 @@
 #ifndef COMMANDS_H
 
 void printAll();
+void printAllSector();
 void printFrom(char*);
 void printAllCredits();
+void printAllInventory();
 void setAllCredits(int);
 void addAllCredits(int);
 void multAllCredits(float);

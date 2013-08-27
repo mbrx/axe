@@ -57,5 +57,5 @@ void uint32ToBuf(uint32_t val, uint8_t *buf);
 void uint16ToBuf(uint16_t val, uint8_t *buf);
 void int32ToBuf(int32_t val, uint8_t *buf);
 void int16ToBuf(int16_t val, uint8_t *buf);
-
+void hexDump(void *data,int datalen);
 #endif

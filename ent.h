@@ -35,7 +35,7 @@ void printIndentation();
 void printList(uint8_t **data);
 void printStruct(uint8_t **data);
 void printEntry(int ordinal, char *label, uint8_t **data);
-int findBlockIndex(int entId, int blockId);
+int findBlockIndex(int entId, int blockId, int prev);
 int getValueAsInt(int entId, int index);
 void setValueAsInt(int entId, int index, int value);
 int findFreeSlot(int entId);
@@ -43,5 +43,6 @@ int readEntToBuffer(int entId, uint8_t *buf,int bufsize);
 int writeBufferToEnt(int entId, uint8_t *buf,int length);
 void flushToAfterTag(uint8_t **buf, char *tag, uint8_t *endOfBuffer);
 int createNewBlockEntry(int entId,int blockId,int amount);
-
+void printInventory(int entId);
+int getSector(int entId, int *xyz);
 #endif
